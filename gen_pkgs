@@ -1,0 +1,8 @@
+#!/bin/sh
+
+for package in src/*; do
+    pushd $package
+    makepkg_chroot
+    popd
+    mv $package/*.pkg.tar.zst .
+done
