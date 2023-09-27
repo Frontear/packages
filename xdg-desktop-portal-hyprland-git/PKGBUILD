@@ -1,0 +1,49 @@
+# Maintainer: Ali Rizvi <frontear4594@gmail.com>
+pkgname="xdg-desktop-portal-hyprland-git"
+pkgver=v1.1.0.r2.gb6e1732
+pkgrel=1
+pkgdesc="An XDG Desktop Portal implementation for Hyprland"
+arch=("x86_64")
+url="https://github.com/hyprwm/xdg-desktop-portal-hyprland"
+license=("custom:BSD-3-Clause")
+depends=(
+    "pipewire"
+    "qt6-wayland"
+    "sdbus-cpp-git"
+)
+makedepends=(
+    "cmake" 
+    "git" 
+    "meson" 
+    "wayland-protocols")
+optdepends=(
+    "xdg-desktop-portal-gtk: for a file chooser dialog"
+)
+provides=("${pkgname%-git}" "xdg-desktop-portal-impl")
+conflicts=("${pkgname%-git}" "xdg-desktop-portal-wlr")
+replaces=("${pkgname%-git}" "xdg-desktop-portal-wlr")
+source=("${pkgname%-git}::git+https://github.com/hyprwm/xdg-desktop-portal-hyprland.git")
+md5sums=('SKIP')
+
+pkgver() {
+    cd "$srcdir/${pkgname%-git}"
+    git describe --long --tags --abbrev=7 | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+    cd "$srcdir/${pkgname%-git}"
+    git submodule update --init
+}
+
+build() {
+    cd "$srcdir/${pkgname%-git}"
+    arch-meson build
+    meson compile -C build
+}
+
+package() {
+    cd "$srcdir/${pkgname%-git}"
+    depends+=("xdg-desktop-portal")
+    meson install -C build --destdir "${pkgdir}"
+    install -Dm0644 -t "${pkgdir}/usr/share/licenses/${pkgname}" ./LICENSE
+}

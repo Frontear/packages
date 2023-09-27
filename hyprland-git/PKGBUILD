@@ -1,0 +1,55 @@
+# Maintainer: Ali Rizvi <frontear4594@gmail.com>
+pkgname="hyprland-git"
+pkgver=0.30.0.r13.g6d7dc70
+pkgrel=1
+pkgdesc="A highly customizable dynamic tiling Wayland compositor that doesn't sacrifice on its looks"
+arch=("x86_64")
+url="https://github.com/hyprwm/hyprland"
+license=("custom:BSD-3-Clause")
+depends=(
+    "libdisplay-info"
+    "libinput"
+    "libliftoff"
+    "libxcomposite"
+    "libxkbcommon"
+    "pango"
+    "seatd" # wlroots dependency
+    "xorg-xwayland"
+)
+makedepends=(
+    "cmake" 
+    "cpio" 
+    "git" 
+    "meson" 
+    "wayland-protocols" 
+    "xcb-util-wm" 
+    "xorg-xinput"
+)
+optdepends=(
+    "xdg-desktop-portal-hyprland: for screensharing"
+)
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+replaces=("${pkgname%-git}")
+source=("${pkgname%-git}::git+${url}.git")
+md5sums=("SKIP")
+
+pkgver() {
+	cd "$srcdir/${pkgname%-git}"
+    git describe --long --tags --abbrev=7 | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+	cd "$srcdir/${pkgname%-git}"
+    git submodule update --init
+}
+
+build() {
+	cd "$srcdir/${pkgname%-git}"
+}
+
+package() {
+	cd "$srcdir/${pkgname%-git}"
+    make PREFIX="${pkgdir}/usr" install
+    install -Dm0644 -t "${pkgdir}/usr/share/licenses/${pkgname}" ./LICENSE
+}
