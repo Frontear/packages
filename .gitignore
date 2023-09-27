@@ -1,0 +1,3 @@
+# Ignore all remnant files except for PKGBUILD
+src/*/*
+!src/*/PKGBUILD
