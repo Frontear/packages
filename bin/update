@@ -13,7 +13,7 @@ for SRC in ../src/*; do
 done
 
 for PKG in ../pkg/*; do
-    repo-add --sign --verify ../db/$DATABASE_NAME.db.tar.gz $PKG
+    repo-add ../db/$DATABASE_NAME.db.tar.gz $PKG
 
     if [ $? -ne 0 ]; then
         echo "Failed to add packages to repo, halting!"
