@@ -6,3 +6,5 @@ for package in src/*; do
     popd
     mv $package/*.pkg.tar.zst .
 done
+
+repo-add ./frontear.db.tar.gz ./*.pkg.tar.zst
