@@ -9,7 +9,7 @@ for SRC in ../src/*; do
     echo "TODO: fix makepkg_chroot"
     popd
 
-    mv $PKG/*.pkg.tar.zst ../pkg
+    mv $SRC/*.pkg.tar.zst ../pkg
 done
 
 for PKG in ../pkg/*; do
@@ -27,6 +27,7 @@ while read LINK; do
     FILE=$(readlink -f $LINK)
     rm $LINK && cp $FILE $LINK
 done <<< "$(find $(pwd) -type l)"
+
 popd
 
 popd
