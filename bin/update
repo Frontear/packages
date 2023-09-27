@@ -6,7 +6,7 @@ pushd $(dirname $0)
 
 for SRC in ../src/*; do
     pushd $SRC
-    echo "TODO: fix makepkg_chroot -- --sign"
+    echo "TODO: fix makepkg_chroot"
     popd
 
     mv $PKG/*.pkg.tar.zst ../pkg
