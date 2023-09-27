@@ -1,0 +1,32 @@
+#!/bin/sh
+
+DATABASE_NAME="frontear"
+
+pushd $(dirname $0)
+
+for SRC in ../src/*; do
+    pushd $SRC
+    echo "TODO: fix makepkg_chroot -- --sign"
+    popd
+
+    mv $PKG/*.pkg.tar.zst ../pkg
+done
+
+for PKG in ../pkg/*; do
+    repo-add --sign --verify ../db/$DATABASE_NAME.db.tar.gz $PKG
+
+    if [ $? -ne 0 ]; then
+        echo "Failed to add packages to repo, halting!"
+        exit 0
+    fi
+done
+
+pushd $(readlink -f ../db)
+
+while read LINK; do
+    FILE=$(readlink -f $LINK)
+    rm $LINK && cp $FILE $LINK
+done <<< "$(find $(pwd) -type l)"
+popd
+
+popd
