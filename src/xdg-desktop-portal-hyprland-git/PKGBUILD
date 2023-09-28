@@ -15,15 +15,25 @@ makedepends=(
     "cmake" 
     "git" 
     "meson" 
-    "wayland-protocols")
+    "wayland-protocols"
+)
 optdepends=(
     "xdg-desktop-portal-gtk: for a file chooser dialog"
 )
-provides=("${pkgname%-git}" "xdg-desktop-portal-impl")
-conflicts=("${pkgname%-git}" "xdg-desktop-portal-wlr")
-replaces=("${pkgname%-git}" "xdg-desktop-portal-wlr")
-source=("${pkgname%-git}::git+https://github.com/hyprwm/xdg-desktop-portal-hyprland.git")
-md5sums=('SKIP')
+provides=(
+    "${pkgname%-git}"
+    "xdg-desktop-portal-impl"
+)
+conflicts=(
+    "${pkgname%-git}"
+    "xdg-desktop-portal-wlr"
+)
+replaces=(
+    "${pkgname%-git}"
+    "xdg-desktop-portal-wlr"
+)
+source=("${pkgname%-git}::git+${url}.git")
+md5sums=("SKIP")
 
 pkgver() {
     cd "$srcdir/${pkgname%-git}"

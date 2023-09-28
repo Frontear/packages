@@ -1,0 +1,38 @@
+# Maintainer: Ali Rizvi <frontear4594@gmail.com>
+pkgname="libusbmuxd-git"
+pkgver=2.0.2.r32.g30e678d
+pkgrel=1
+pkgdesc="A client library to multiplex connections from and to iOS devices"
+arch=("x86_64")
+url="https://github.com/libimobiledevice/libusbmuxd"
+license=("LGPL2.1")
+depends=(
+    "libimobiledevice-glue-git"
+    "libplist-git"
+)
+makedepends=("git")
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+replaces=("${pkgname%-git}")
+source=("${pkgname%-git}::git+${url}.git")
+md5sums=("SKIP")
+
+pkgver() {
+	cd "$srcdir/${pkgname%-git}"
+    git describe --long --tags --abbrev=7 | sed "s/-/.r/;s/-/./"
+}
+
+prepare() {
+	cd "$srcdir/${pkgname%-git}"
+}
+
+build() {
+	cd "$srcdir/${pkgname%-git}"
+	./autogen.sh --prefix=/usr
+	make
+}
+
+package() {
+	cd "$srcdir/${pkgname%-git}"
+	make DESTDIR="$pkgdir/" install
+}
