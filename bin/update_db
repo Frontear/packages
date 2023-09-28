@@ -1,0 +1,19 @@
+#!/bin/sh
+
+pushd $(dirname $0)/../x86_64 >> /dev/null
+
+repo-add frontear.db.tar.gz *.pkg.tar.zst
+
+# pacman cannot read the symlinks on github
+OLD_UMASK=$(umask)
+
+umask 033
+
+while read LINK; do
+    FILE=$(readlink -f $LINK)
+    rm $LINK && cp $FILE $LINK
+done <<< "$(find $PWD -type l)"
+
+umask $OLD_UMASK
+
+popd >> /dev/null
