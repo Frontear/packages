@@ -1,0 +1,27 @@
+#!/bin/sh
+
+pushd $(dirname $0) >> /dev/null
+
+for SRC in ../src/*; do
+    pushd $SRC >> /dev/null
+
+    # recalculate dependencies
+    if [ -d $PWD/deps ]; then
+        rm -r $PWD/deps
+    fi
+
+    if [ ! -d $PWD/deps ]; then
+        mkdir $PWD/deps
+    fi
+
+    source $PWD/PKGBUILD
+    for DEP in "${depends[@]}"; do
+        if [ -d ../$DEP ]; then
+            ln -sr ../$DEP $PWD/deps
+        fi
+    done
+
+    popd >> /dev/null
+done
+
+popd >> /dev/null

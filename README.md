@@ -7,7 +7,7 @@ Add this github repository as a custom package repository in your `/etc/pacman.c
 ```conf
 [frontear]
 SigLevel = Optional TrustAll
-Server = https://raw.githubusercontent.com/Frontear/packages/main/db
+Server = https://raw.githubusercontent.com/Frontear/packages/main/x86_64
 ```
 
 Then, just run `pacman -Syu` to refresh local databases.
