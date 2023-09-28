@@ -1,0 +1,35 @@
+# Maintainer: Ali Rizvi <frontear4594@gmail.com>
+pkgname="libimobiledevice-glue-git"
+pkgver=1.0.0.r3.g214bafd
+pkgrel=1
+pkgdesc="A library with common code used by libraries and tools around the libimobiledevice project"
+arch=("x86_64")
+url="https://github.com/libimobiledevice/libimobiledevice-glue"
+license=("LGPL2.1")
+depends=("libplist-git")
+makedepends=("git")
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+replaces=("${pkgname%-git}")
+source=("${pkgname%-git}::git+${url}.git")
+md5sums=("SKIP")
+
+pkgver() {
+	cd "$srcdir/${pkgname%-git}"
+    git describe --long --tags --abbrev=7 | sed "s/-/.r/;s/-/./"
+}
+
+prepare() {
+	cd "$srcdir/${pkgname%-git}"
+}
+
+build() {
+	cd "$srcdir/${pkgname%-git}"
+	./autogen.sh --prefix=/usr
+	make
+}
+
+package() {
+	cd "$srcdir/${pkgname%-git}"
+	make DESTDIR="$pkgdir/" install
+}
