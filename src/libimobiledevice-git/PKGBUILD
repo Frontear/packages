@@ -31,10 +31,6 @@ pkgver() {
     git describe --long --tags --abbrev=7 | sed "s/-/.r/;s/-/./"
 }
 
-prepare() {
-    cd "$srcdir/${pkgname%-git}"
-}
-
 build() {
     cd "$srcdir/${pkgname%-git}"
     ./autogen.sh --prefix=/usr

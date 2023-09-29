@@ -17,9 +17,7 @@ makedepends=(
     "meson" 
     "wayland-protocols"
 )
-optdepends=(
-    "xdg-desktop-portal-gtk: for a file chooser dialog"
-)
+optdepends=("xdg-desktop-portal-gtk: for a file chooser dialog")
 provides=(
     "${pkgname%-git}"
     "xdg-desktop-portal-impl"

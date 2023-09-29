@@ -24,12 +24,12 @@ source=("${pkgname%-git}::git+${url}.git")
 md5sums=("SKIP")
 
 pkgver() {
-	cd "$srcdir/${pkgname%-git}"
+    cd "$srcdir/${pkgname%-git}"
     git describe --long --tags --abbrev=7 | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 prepare() {
-	cd "$srcdir/${pkgname%-git}"
+    cd "$srcdir/${pkgname%-git}"
     cmake -B build \
         -DBUILD_CODE_GEN=ON \
         -DBUILD_DOC=OFF \
@@ -41,12 +41,12 @@ prepare() {
 }
 
 build() {
-	cd "$srcdir/${pkgname%-git}"
+    cd "$srcdir/${pkgname%-git}"
     cmake --build build
 }
 
 package() {
-	cd "$srcdir/${pkgname%-git}"
+    cd "$srcdir/${pkgname%-git}"
     cmake --install build --prefix "${pkgdir}/usr"
     install -Dm0644 -t "${pkgdir}/usr/share/licenses/${pkgname}" ./COPYING-LGPL-Exception
 }
