@@ -14,15 +14,15 @@ depends=(
     "libxkbcommon"
     "pango"
     "seatd" # wlroots dependency
+    "xcb-util-wm"
     "xorg-xwayland"
 )
 makedepends=(
-    "cmake" 
-    "cpio" 
-    "git" 
-    "meson" 
-    "wayland-protocols" 
-    "xcb-util-wm" 
+    "cmake"
+    "cpio"
+    "git"
+    "meson"
+    "wayland-protocols"
     "xorg-xinput"
 )
 optdepends=(
