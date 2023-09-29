@@ -35,21 +35,17 @@ source=("${pkgname%-git}::git+${url}.git")
 md5sums=("SKIP")
 
 pkgver() {
-	cd "$srcdir/${pkgname%-git}"
+    cd "$srcdir/${pkgname%-git}"
     git describe --long --tags --abbrev=7 | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 prepare() {
-	cd "$srcdir/${pkgname%-git}"
+    cd "$srcdir/${pkgname%-git}"
     git submodule update --init
 }
 
-build() {
-	cd "$srcdir/${pkgname%-git}"
-}
-
 package() {
-	cd "$srcdir/${pkgname%-git}"
+    cd "$srcdir/${pkgname%-git}"
     make PREFIX="${pkgdir}/usr" install
     install -Dm0644 -t "${pkgdir}/usr/share/licenses/${pkgname}" ./LICENSE
 }
