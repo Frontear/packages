@@ -1,6 +1,6 @@
 # Maintainer: Ali Rizvi <frontear4594@gmail.com>
 pkgname="hyprland-git"
-pkgver=0.30.0.r22.g3f09b14
+pkgver=0.30.0.r38.ga2a29a6
 pkgrel=1
 pkgdesc="A highly customizable dynamic tiling Wayland compositor that doesn't sacrifice on its looks"
 arch=("x86_64")
