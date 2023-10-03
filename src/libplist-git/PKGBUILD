@@ -1,6 +1,6 @@
 # Maintainer: Ali <frontear4594@gmail.com>
 pkgname="libplist-git"
-pkgver=2.3.0.r19.gd45396a
+pkgver=2.3.0.r20.g2cd858c
 pkgrel=1
 pkgdesc="A library to handle Apple Property List format in binary or XML"
 arch=("x86_64")
