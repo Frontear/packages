@@ -53,5 +53,5 @@ package() {
     cd "$srcdir/${pkgname%-git}"
     depends+=("xdg-desktop-portal")
     meson install -C build --destdir "${pkgdir}"
-    install -Dm0644 -t "${pkgdir}/usr/share/licenses/${pkgname}" ./LICENSE
+    install -Dm0644 -t "${pkgdir}/usr/share/licenses/${pkgname%-git}" ./LICENSE
 }

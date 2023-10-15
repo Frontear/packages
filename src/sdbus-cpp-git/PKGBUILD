@@ -48,5 +48,5 @@ build() {
 package() {
     cd "$srcdir/${pkgname%-git}"
     cmake --install build --prefix "${pkgdir}/usr"
-    install -Dm0644 -t "${pkgdir}/usr/share/licenses/${pkgname}" ./COPYING-LGPL-Exception
+    install -Dm0644 -t "${pkgdir}/usr/share/licenses/${pkgname%-git}" ./COPYING-LGPL-Exception
 }
