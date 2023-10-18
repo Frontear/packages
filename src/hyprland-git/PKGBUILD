@@ -7,13 +7,20 @@ arch=("x86_64")
 url="https://github.com/hyprwm/hyprland"
 license=("custom:BSD-3-Clause")
 depends=(
+    "cairo"
+    "glib2"
     "libdisplay-info"
+    "libdrm"
+    "libglvnd"
     "libinput"
     "libliftoff"
-    "libxcomposite"
+    "libxcb"
     "libxkbcommon"
+    "mesa"
     "pango"
+    "pixman"
     "seatd" # wlroots dependency
+    "wayland"
     "xcb-util-wm"
     "xorg-xwayland"
 )

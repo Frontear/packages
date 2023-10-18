@@ -7,9 +7,14 @@ arch=("x86_64")
 url="https://github.com/hyprwm/xdg-desktop-portal-hyprland"
 license=("custom:BSD-3-Clause")
 depends=(
-    "pipewire"
-    "qt6-wayland"
+    "libdrm"
+    "libpipewire"
+    "mesa"
+    #"pipewire"
+    "qt6-base"
+    #"qt6-wayland"
     "sdbus-cpp-git"
+    "wayland"
 )
 makedepends=(
     "cmake" 

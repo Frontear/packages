@@ -1,6 +1,6 @@
 # Maintainer: Ali Rizvi <frontear4594@gmail.com>
 pkgname=aylurs-gtk-shell-git
-pkgver=1.4.0.r5.g24cc942
+pkgver=1.4.0.r6.g57f9ba2
 pkgrel=1
 pkgdesc="A customizable and extensible shell"
 arch=("x86_64")
@@ -8,15 +8,16 @@ url="https://github.com/Aylur/ags"
 license=("GPL3")
 depends=(
     "gjs"
+    "glib2"
     "gtk-layer-shell"
-    "libpulse" # Forced dependency of Audio service in meson
-    "typescript"
+    "libpulse" # forced dependency of audio service
 )
 makedepends=(
     "git"
     "gobject-introspection"
     "meson"
     "npm"
+    "typescript"
 )
 optdepends=(
     "gnome-bluetooth-3.0: For functionality of the provided Bluetooth service"
