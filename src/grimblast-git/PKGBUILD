@@ -1,0 +1,44 @@
+# Maintainer: Ali Rizvi <frontear4594@gmail.com>
+pkgname=grimblast-git
+pkgver=0.1.r19.g2e3f8ac
+pkgrel=1
+pkgdesc="A helper for screenshots within Hyprland"
+arch=("x86_64")
+url="https://github.com/hyprwm/contrib"
+license=("custom:MIT")
+depends=(
+    "grim"
+    "hyprland"
+    "jq"
+    "slurp"
+)
+makedepends=(
+    "git"
+    "scdoc"
+)
+optdepends=(
+    "hyprpicker: to freeze the screen during a screenshot"
+    "libnotify: to show notifications on screenshot"
+    "wl-clipboard: to automatically copy image to clipboard"
+)
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+replaces=("${pkgname%-git}")
+source=("contrib::git+${url}.git")
+md5sums=("SKIP")
+
+pkgver() {
+	cd "$srcdir/contrib"
+    git describe --long --tags --abbrev=7 | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+build() {
+	cd "$srcdir/contrib/${pkgname%-git}"
+    make all
+}
+
+package() {
+	cd "$srcdir/contrib/${pkgname%-git}"
+    make PREFIX="${pkgdir}/usr" install
+    install -Dm0644 -t "${pkgdir}/usr/share/licenses/${pkgname%-git}" ../LICENSE
+}
