@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# Go back 2 directories from bin to root
+pushd $(dirname $(dirname $0)) >> /dev/null
+
+DATABASE_PATH="$PWD/x86_64"
+
+# process dependencies into deps folder, containing symlinks to other managed packages
+while read -r PKGBUILD; do
+    pushd $(dirname $PKGBUILD) >> /dev/null
+
+    # Recreate deps only if PKGBUILD newer
+    if [ ! -d deps ] || [ $(stat -c %Y $PKGBUILD) -gt $(stat -c %Y deps) ]; then
+        [ -d deps ] && rm -rf deps
+        mkdir deps
+
+        source $PKGBUILD
+
+        # do NOT check optdepends, these are not mandatory for building.
+        DEPS=("${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}")
+        for DEP in "${DEPS[@]}"; do
+            [ -d ../$DEP ] && ln -sr ../$DEP deps
+        done
+    fi
+
+    popd > /dev/null
+done <<< "$(find $PWD -type f -name PKGBUILD)"
+
+# Nasty way to write out a sorting algo, sorts by least -> greatest dependencies
+SORTED_PKGS=($(while read -r DEPS; do
+    echo $(ls -A $DEPS | wc -l) $(dirname $DEPS)
+done <<< "$(find $PWD/src -type d -name deps)" | sort | cut -d" " -f2))
+
+# Re-create
+[ -d "$DATABASE_PATH" ] && rm -rf $DATABASE_PATH; mkdir $DATABASE_PATH
+
+for PKG_DIR in "${SORTED_PKGS[@]}"; do
+    pushd $PKG_DIR >> /dev/null
+
+    DEPENDS=()
+    while read -r DEP; do
+        PKG=$([ ! -z "$DEP" ] && find $(readlink -f "$DEP") -name "*.pkg.tar.zst")
+        [ -f "$PKG" ] && DEPENDS+=("-I $PKG")
+    done <<< "$(find $PWD/deps -type l)"
+
+    makepkg_chroot "${DEPENDS[@]}"
+
+    popd >> /dev/null
+done
+
+while read -r PKG; do
+    mv $PKG $DATABASE_PATH
+done <<< "$(find $PWD -type f -name *.pkg.tar.zst)"
+
+pushd $DATABASE_PATH >> /dev/null
+
+repo-add frontear.db.tar.gz *.pkg.tar.zst
+
+# repo-add makes symlinks to db files, but pacman cannot process symlinks on a remote
+# we fix this by copying the file it expects in-place of the symlink
+while read -r SYMLINK; do
+    FILE=$(readlink -f $SYMLINK)
+    rm -f $SYMLINK && cp $FILE $SYMLINK
+done <<< "$(find $PWD -type l)"
+
+popd >> /dev/null
+
+popd >> /dev/null
