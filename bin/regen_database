@@ -54,7 +54,9 @@ done <<< "$(find $PWD -type f -name *.pkg.tar.zst)"
 
 pushd $DATABASE_PATH >> /dev/null
 
-repo-add frontear.db.tar.gz *.pkg.tar.zst
+find $PWD -name "*.pkg.tar.zst" -exec gpg --detach-sign --output {}.sig --sign {} \;
+
+repo-add --sign --verify frontear.db.tar.gz *.pkg.tar.zst
 
 # repo-add makes symlinks to db files, but pacman cannot process symlinks on a remote
 # we fix this by copying the file it expects in-place of the symlink
