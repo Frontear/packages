@@ -9,7 +9,7 @@ Add this github repository as a custom package repository in your `/etc/pacman.c
 Server = https://raw.githubusercontent.com/Frontear/packages/main/x86_64
 ```
 
-Then, import my gpg key: [BCB5CEFDE22282F5](https://gist.github.com/Frontear/e927f66b37db9fd8a1be18fea02d0cf1):
+Then, import my gpg key [BCB5CEFDE22282F5](https://gist.github.com/Frontear/e927f66b37db9fd8a1be18fea02d0cf1):
 
 ```
 # pacman-key --add /path/to/frontear.gpg
