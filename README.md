@@ -20,4 +20,5 @@ Finally, run `pacman -Syu` to refresh local databases and install as you would a
 
 ## License
 All code in this repo (the binaries and PKGBUILD scripts) are subject to the GNU General Public License v3.0. Please be mindful of this when forking, downloading, and redistributing.
-Please also not that the programs provided via these scripts, and the overarching repository are **NOT** subject to the above license. They possess their own license, which are either packaged with them or presented upon installing the package. Please be mindful of this when downloading, installing, and running these programs.
+
+Please also note that the programs provided via these scripts, and the overarching repository are **NOT** subject to the above license. They possess their own licenses, which are either packaged with them or presented upon installing the package. Please be mindful of this when downloading, installing, and running these programs.
