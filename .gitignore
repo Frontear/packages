@@ -1,3 +1,2 @@
-# Ignore all remnant files except for PKGBUILD
-src/*/*
-!src/*/PKGBUILD
+# Ignore only deps folder (resolved at runtime ONCE)
+src/*/deps
