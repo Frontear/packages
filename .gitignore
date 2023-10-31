@@ -1,2 +1,2 @@
-# Ignore only deps folder (resolved at runtime ONCE)
+# Ignore only deps folder, all other files are intended to be cleaned out, and this will ensure that.
 src/*/deps
