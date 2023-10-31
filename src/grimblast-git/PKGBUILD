@@ -1,6 +1,6 @@
 # Maintainer: Ali Rizvi <frontear4594@gmail.com>
 pkgname=grimblast-git
-pkgver=0.1.r22.gc0b2d2e
+pkgver=0.1.r27.gbfd3e0e
 pkgrel=1
 pkgdesc="A helper for screenshots within Hyprland"
 arch=("x86_64")

@@ -1,6 +1,6 @@
 # Maintainer: Ali Rizvi <frontear4594@gmail.com>
 pkgname="xdg-desktop-portal-hyprland-git"
-pkgver=1.2.3.r0.g22e7a65
+pkgver=1.2.3.r2.g3e44c36
 pkgrel=1
 pkgdesc="An XDG Desktop Portal implementation for Hyprland"
 arch=("x86_64")
