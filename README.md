@@ -1,5 +1,10 @@
 # Frontear's Repository
-My personal repository containing Arch Linux PKGBUILD's for software I use often. This was made out of frustration from the AUR and official repos having incorrect packages, wildly unnecessary dependency additions and flawed building process, or straight up missing features.
+A personally maintained Arch Linux repository for some of my most used packages.
+
+This repository was made out of frustration with maintainers on the Arch User Repository
+providing broken packages, incomplete program files, too many or missing dependencies, and a broken build pipeline.
+
+The main purpose of the PKGBUILDs here are to "just work", using as similar of a build pipeline as possible to what the sources recommend.
 
 ## How to use?
 Add this github repository as a custom package repository in your `/etc/pacman.conf`:
@@ -11,7 +16,7 @@ Server = https://raw.githubusercontent.com/Frontear/packages/main/x86_64
 
 Then, import my gpg key [BCB5CEFDE22282F5](https://gist.github.com/Frontear/e927f66b37db9fd8a1be18fea02d0cf1):
 
-```
+```console
 # pacman-key --add /path/to/frontear.gpg
 # pacman-key --lsign-key BCB5CEFDE22282F5
 ```
