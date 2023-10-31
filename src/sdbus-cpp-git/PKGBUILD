@@ -1,6 +1,6 @@
 # Maintainer: Your Name <frontear4594@gmail.com>
 pkgname=sdbus-cpp-git
-pkgver=1.4.0.r2.gb7b454b
+pkgver=1.4.0.r3.g9da18ae
 pkgrel=1
 pkgdesc="High-level C++ D-Bus library for Linux designed to provide easy-to-use yet powerful API in modern C++"
 arch=("x86_64")
