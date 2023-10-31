@@ -75,12 +75,6 @@ done <<<"$(find "$DATABASE_DIR" -mindepth 1 -maxdepth 1 -type l)"
 popd >> /dev/null
 
 # Clean directories of old logs and source clones
-while read -r SCRAP; do
-    # Ignore PKGBUILD and DEPS_DIR
-    [ "$(basename $SCRAP)" = "PKGBUILD" -a -f "$SCRAP" ] && continue
-    [ "$(basename $SCRAP)" = "$DEPS_DIR" -a -d "$SCRAP" ] && continue
-
-    rm -rf $SCRAP
-done <<< "$(find "$SOURCE_DIR" -mindepth 2 -maxdepth 2)"
+find "$SOURCE_DIR" -mindepth 2 -maxdepth 2 -not -name "PKGBUILD" -a -not -name "$DEPS_DIR" -exec rm -rf {} \;
 
 popd >> /dev/null
