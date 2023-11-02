@@ -1,0 +1,80 @@
+#!/bin/sh
+
+pushd "$(dirname $0)/.." >> /dev/null
+
+GPG_KEY="BCB5CEFDE22282F5"
+
+DEPS_DIR="deps"
+SOURCE_DIR="$PWD/src"
+DATABASE_DIR="$PWD/x86_64"
+
+DB_EXT="db.tar.gz"
+PKG_EXT="$(sh -c "$(grep "PKGEXT" /etc/makepkg.conf) && echo \$PKGEXT" | cut -c2-)"
+
+# Resolve dependencies ahead of time to speed up dependency resolution in the building stage
+while read -r PACKAGE; do
+    pushd "$PACKAGE" >> /dev/null
+
+    #  PKGBUILD has changed               ||   dependencies never resolved before (new package)
+    if ! git diff --quiet "$PWD/PKGBUILD" || [ ! -d "$PWD/$DEPS_DIR" ]; then
+        mkdir -p "$PWD/$DEPS_DIR"
+        source "$PWD/PKGBUILD"
+
+        # Resolve all depends besides optdepends for obvious reasons
+        DEPS=("${checkdepends[@]}" "${depends[@]}" "${makedepends[@]}")
+        for DEP in "${DEPS[@]}"; do
+            # we build dependency      haven't linked before (new)
+            [ -d "$SOURCE_DIR/$DEP" -a ! -L "$PWD/$DEPS_DIR/$DEP" ] && ln -s "$SOURCE_DIR/$DEP" "$PWD/$DEPS_DIR/$DEP"
+        done
+    fi
+
+    popd >> /dev/null
+done <<< "$(find "$SOURCE_DIR" -mindepth 1 -maxdepth 1 -type d)"
+
+# Recursively build package by building the necessary dependencies
+# before attaching for the build process
+#
+# $1    Directory to PKGBUILD
+build() {
+    [ -f "$1"/*.$PKG_EXT ] && return 0 # already made, do not remake. mostly for those recursive operations that make dependencies ahead of time
+
+    local -a DEPENDS
+    local DEPENDENCY
+
+    while read -r DEPENDENCY; do
+        if [ -n "$DEPENDENCY" ]; then
+            [ -f "$DEPENDENCY"/*.$PKG_EXT ] || build "$DEPENDENCY"
+            DEPENDS+=("-I $(find "$DEPENDENCY" -mindepth 1 -maxdepth 1 -type f -name "*.$PKG_EXT")")
+        fi
+    done <<< "$(find "$1/$DEPS_DIR" -mindepth 1 -maxdepth 1 -type l -exec readlink {} \;)"
+
+    pushd "$1" >> /dev/null
+    makepkg_chroot "${DEPENDS[@]}"
+    popd >> /dev/null
+}
+
+mkdir -p "$DATABASE_DIR"
+while read -r PACKAGE; do
+    build "$PACKAGE"
+
+    # Erase old package and signature, then move built package to DATABASE_DIR
+    find "$DATABASE_DIR" -mindepth 1 -maxdepth 1 -type f -name "$(basename $PACKAGE)*.$PKG_EXT" -exec rm {} {}.sig \;
+    find "$PACKAGE" -mindepth 1 -maxdepth 1 -type f -name "*.$PKG_EXT" -exec mv {} "$DATABASE_DIR" \;
+done <<< "$(find "$SOURCE_DIR" -mindepth 1 -maxdepth 1 -type d)"
+
+# Sign packages and update repository database with new package files
+pushd "$DATABASE_DIR" >> /dev/null
+
+# Sign packages first, then add to repo all together
+# This has the benefit of generating a .old with the previous database entries
+find "$DATABASE_DIR" -mindepth 1 -maxdepth 1 -type f -name "*.$PKG_EXT" -a -not -name "*.sig" -exec gpg --detach-sign --output {}.sig --sign {} \; -exec repo-add --sign --verify "frontear.$DB_EXT" {} +;
+while read -r DB_LINK; do
+    cp --remove-destination "$(readlink $DB_LINK)" "$DB_LINK" # force replace link
+done <<<"$(find "$DATABASE_DIR" -mindepth 1 -maxdepth 1 -type l)"
+
+popd >> /dev/null
+
+# Clean directories of old logs and source clones
+find "$SOURCE_DIR" -mindepth 2 -maxdepth 2 -not -name "PKGBUILD" -a -not -name "$DEPS_DIR" -exec rm -rf {} \;
+
+popd >> /dev/null

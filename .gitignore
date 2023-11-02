@@ -1,2 +1,2 @@
-# Ignore only meta folder, ensures sanity check for cleanup later
-src/*/meta
+# Ignore only deps folder, all other files are intended to be cleaned out, and this will ensure that.
+src/*/deps
