@@ -1,6 +1,6 @@
 # Maintainer: Ali Rizvi <frontear4594@gmail.com>
 pkgname=aylurs-gtk-shell-git
-pkgver=1.4.0.r47.g75edd51
+pkgver=1.5.1.beta.r0.g54fd9cf
 pkgrel=1
 pkgdesc="A customizable and extensible shell"
 arch=("x86_64")
